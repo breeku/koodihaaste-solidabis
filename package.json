@@ -1,0 +1,22 @@
+{
+  "name": "koodihaaste-solidabis",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "watchify src/js/index.js -o static/bundle.js -p esmify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tweenjs/tween.js": "^18.5.0",
+    "browserify": "^16.5.1",
+    "dat.gui": "^0.7.7",
+    "es6-tween": "^5.5.11",
+    "esmify": "^2.1.1",
+    "three": "^0.115.0",
+    "watchify": "^3.11.1"
+  }
+}
