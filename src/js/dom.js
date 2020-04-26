@@ -10,7 +10,9 @@ export const updateTravelInfo = (route, lines) => {
             }
         }
         if (color !== "") {
-            travelInfo.innerHTML += index === route.nodes.length - 1 ? "" : node + " -> " + route.nodes[index + 1] + " using " + color + ". "
+            travelInfo.innerHTML += node + " -> " + route.nodes[index + 1] + " = " + color + ". "
+        } else {
+            travelInfo.innerHTML += "Kesto " + route.time + "."
         }
     }
 }

@@ -305,9 +305,10 @@ window.addEventListener("resize", onWindowResize)
 
 let animate = function (t) {
     requestAnimationFrame(animate)
-    let deltaTime = clock.getDelta()
+
 
     if (highlighted) {
+        let deltaTime = clock.getDelta()
         let blink = Math.floor(time / 0.5) & 1
 
         if (previousFrameBlinked !== blink) {
@@ -315,9 +316,11 @@ let animate = function (t) {
         }
 
         previousFrameBlinked = blink
+
+        time += deltaTime
     }
 
-    time += deltaTime
+
 
     if (controls.enabled) {
         controls.update()

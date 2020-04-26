@@ -25,6 +25,18 @@ const transformJSON = () => {
 
         result = { ...result, [value.mista]: reitit }
     }
+
+    for (let reitti in result) {
+        for (let node in result[reitti]) {
+            if (!result[node]) {
+                result[node] = {
+                    ...result[node],
+                    [reitti]: result[reitti][node],
+                }
+            }
+        }
+    }
+
     return result
 }
 
@@ -35,62 +47,53 @@ export const pathfinding = (from, to) => {
         console.error("No route provided")
         return
     }
-    let unvisited = []
-    let visited = [from]
+
+    let unvisited = [...reittidata.pysakit]
+    let visited = []
     let route = { nodes: [], time: 0 }
-    let history = {}
+    let history = {
+        [from]: { distance: 0, prevNode: from },
+    }
     let currNode = from
     let index = -1
-
-    for (let tie in tiet) {
-        if (!unvisited.find((x) => x === tie)) unvisited.push(tie)
-    }
-
-    index = unvisited.indexOf(from)
-    if (index !== -1) unvisited.splice(index, 1)
+    let noVisitedNeighbors = []
+    let next = null
 
     for (let node of unvisited) {
-        history = { ...history, [node]: { distance: null, prevNode: null } }
+        if (node !== from)
+            history = {
+                ...history,
+                [node]: { distance: Infinity, prevNode: null },
+            }
     }
-
-    while (unvisited.length > 0) {
+    while (unvisited.length > 0 || noVisitedNeighbors.length > 0) {
         let neighbors = tiet[currNode]
-        let smallest = 999
-        let next = null
+        let smallest = Infinity
 
         for (let node in history) {
             for (let neighbor in neighbors) {
-                if (
-                    unvisited.find((x) => x === neighbor) &&
-                    !visited.find((x) => x === neighbor)
-                ) {
-                    if (neighbors[neighbor] < smallest) {
-                        smallest = neighbors[neighbor]
-                        next = neighbor
-                    }
-                    if (node === neighbor) {
-                        if (currNode === from) {
+                if (node === neighbor) {
+                    if (currNode === from) {
+                        history = {
+                            ...history,
+                            [node]: {
+                                distance: neighbors[node],
+                                prevNode: currNode,
+                            },
+                        }
+                    } else {
+                        let totalDistance =
+                            history[currNode].distance + neighbors[node]
+                        if (
+                            history[neighbor].distance === null ||
+                            history[neighbor].distance >= totalDistance
+                        ) {
                             history = {
                                 ...history,
                                 [node]: {
-                                    distance: neighbors[node],
+                                    distance: totalDistance,
                                     prevNode: currNode,
                                 },
-                            }
-                        } else {
-                            let totalDistance =
-                                history[currNode].distance + neighbors[node]
-                            if (
-                                history[neighbor].distance === null ||
-                                history[neighbor].distance > totalDistance
-                            ) {
-                                history = {
-                                    ...history,
-                                    [node]: {
-                                        distance: totalDistance,
-                                        prevNode: currNode,
-                                    },
-                                }
                             }
                         }
                     }
@@ -98,29 +101,65 @@ export const pathfinding = (from, to) => {
             }
         }
 
-        if (next === null) {
-            next = history[currNode].prevNode
-        }
-
-        currNode = next
-
+        visited.push(currNode)
         index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
-        visited.push(next)
+        for (let node in neighbors) {
+            // go to the neighbor that has the smallest distance
+            if (
+                neighbors[node] <= smallest &&
+                unvisited.find((x) => x === node)
+            ) {
+                smallest = neighbors[node]
+                next = node
+            }
+        }
+
+        if (next === null) {
+            // if no more neighbors to be found, go to previous node
+            if (history[currNode]) {
+                next = history[currNode].prevNode
+            } else {
+                console.error("cannot go back to " + currNode)
+                return
+            }
+        }
+
+        if (currNode === next) {
+            // if the previous node is the same as current node, search for nodes that have unvisited neighbors
+            if (noVisitedNeighbors.length > 0) {
+                next = noVisitedNeighbors[0]
+                noVisitedNeighbors.splice(0, 1)
+            } else {
+                for (let node of visited) {
+                    neighbors = tiet[node]
+                    for (let neighbor in neighbors) {
+                        if (unvisited.find((x) => x === neighbor)) {
+                            noVisitedNeighbors.push(neighbor)
+                        }
+                    }
+                }
+            }
+        }
+
+        currNode = next
     }
 
-    let muuttuja = to
+    console.log(history)
 
-    let reversedRoute = [muuttuja]
+    let temp = to
 
-    while (muuttuja !== from) {
-        muuttuja = history[muuttuja].prevNode
-        reversedRoute.push(muuttuja)
+    let reversedRoute = [temp]
+
+    while (temp !== from) {
+        temp = history[temp].prevNode
+        reversedRoute.push(temp)
     }
 
     reversedRoute.reverse()
     route = { nodes: reversedRoute, time: history[to].distance }
 
+    console.log(route)
     return route
 }
