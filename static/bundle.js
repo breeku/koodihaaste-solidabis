@@ -9776,7 +9776,7 @@ let previousFrameBlinked = false
 let highlighted = false
 
 let nodeList = reittidata.pysakit
-let cameraOptions = { chase: "Chase", orbital: "Orbital", free: "Free" }
+let cameraOptions = { chase: "Chase", orbital: "Orbital" }
 
 let cameraMode = cameraOptions.orbital
 
@@ -10033,12 +10033,12 @@ const init = () => {
         "../../static/models/spacecraft.glb",
         function (gltf) {
             spacecraft = gltf.scene
-            goal = new THREE.Object3D()
-            goal.position.set(0, 100, 0)
-            spacecraft.add(goal)
             spacecraft.scale.set(0.1, 0.1, 0.1)
-            spacecraft.position.y = 5
+            spacecraft.position.set(0.25, 5, 0.7)
             spacecraft.name = "spacecraft"
+            goal = new THREE.Object3D()
+            goal.position.set(0, 150, -2)
+            spacecraft.add(goal)
             scene.add(spacecraft)
         },
         undefined,

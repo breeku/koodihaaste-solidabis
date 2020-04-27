@@ -64,37 +64,18 @@ const pathfinding = (from, to) => {
             }
     }
 
-    let i = 0
-
-    while (unvisited.length > 0 || notVisitedNeighbors.length > 0) {
+    while (unvisited.length > 0) {
         let neighbors = tiet[currNode]
-        for (let node in history) {
-            for (let neighbor in neighbors) {
-                if (node === neighbor) {
-                    if (currNode === from) {
-                        history = {
-                            ...history,
-                            [node]: {
-                                distance: neighbors[node],
-                                prevNode: currNode,
-                            },
-                        }
-                    } else {
-                        let totalDistance =
-                            history[currNode].distance + neighbors[node]
-                        if (
-                            history[neighbor].distance === Infinity ||
-                            history[neighbor].distance >= totalDistance
-                        ) {
-                            //console.log(node + ":" + "{ distance: " + totalDistance + ", prevNode: " + currNode + "}")
-                            history = {
-                                ...history,
-                                [node]: {
-                                    distance: totalDistance,
-                                    prevNode: currNode,
-                                },
-                            }
-                        }
+        let next = null
+
+        for (let neighbor in neighbors) {
+            if (neighbor === from) {
+                history = {
+                    ...history,
+                    [neighbor]: {
+                        distance: neighbors[neighbor],
+                        prevNode: currNode,
+                    },
                 }
             } else {
                 let totalDistance = history[currNode].distance + neighbors[neighbor]
