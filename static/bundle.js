@@ -9775,9 +9775,6 @@ const pathfinding = require('./pathfinding');
 
 let controls, scene, renderer, camera, route, goal, spacecraft
 let temp = new THREE.Vector3()
-let SCREEN_WIDTH = window.innerWidth
-let SCREEN_HEIGHT = window.innerHeight
-let aspect = SCREEN_WIDTH / SCREEN_HEIGHT
 
 let clock = new THREE.Clock()
 let time = 0
@@ -10048,12 +10045,10 @@ const init = () => {
 }
 
 let onWindowResize = () => {
-    SCREEN_WIDTH = window.innerWidth
-    SCREEN_HEIGHT = window.innerHeight
-    aspect = SCREEN_WIDTH / SCREEN_HEIGHT
-    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT)
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
 
-    camera.updateProjectionMatrix()
+    renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 window.addEventListener("resize", onWindowResize)
