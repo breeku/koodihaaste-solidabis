@@ -5,7 +5,7 @@ const dat = require("dat.gui")
 const TWEEN = require("es6-tween")
 
 const {updateLoading, removeLoading, updateTravelInfo} = require("./dom")
-const reittidata = require("./reittidata")
+const reittidata = require("./reittidata.json")
 const pathfinding = require('./pathfinding');
 
 let controls, scene, renderer, camera, route, goal, spacecraft
@@ -296,7 +296,6 @@ window.addEventListener("resize", onWindowResize)
 let animate = function (t) {
     requestAnimationFrame(animate)
 
-
     if (highlighted) {
         let deltaTime = clock.getDelta()
         let blink = Math.floor(time / 0.5) & 1
@@ -309,8 +308,6 @@ let animate = function (t) {
 
         time += deltaTime
     }
-
-
 
     if (controls.enabled) {
         controls.update()

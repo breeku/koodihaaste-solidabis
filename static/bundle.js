@@ -9770,7 +9770,7 @@ const dat = require("dat.gui")
 const TWEEN = require("es6-tween")
 
 const {updateLoading, removeLoading, updateTravelInfo} = require("./dom")
-const reittidata = require("./reittidata")
+const reittidata = require("./reittidata.json")
 const pathfinding = require('./pathfinding');
 
 let controls, scene, renderer, camera, route, goal, spacecraft
@@ -10061,7 +10061,6 @@ window.addEventListener("resize", onWindowResize)
 let animate = function (t) {
     requestAnimationFrame(animate)
 
-
     if (highlighted) {
         let deltaTime = clock.getDelta()
         let blink = Math.floor(time / 0.5) & 1
@@ -10074,8 +10073,6 @@ let animate = function (t) {
 
         time += deltaTime
     }
-
-
 
     if (controls.enabled) {
         controls.update()
@@ -10095,8 +10092,8 @@ let animate = function (t) {
 init()
 animate()
 
-},{"./dom":7,"./pathfinding":9,"./reittidata":10,"dat.gui":1,"es6-tween":2,"three":4,"three/examples/jsm/controls/OrbitControls.js":5,"three/examples/jsm/loaders/GLTFLoader":6}],9:[function(require,module,exports){
-const reittidata = require("./reittidata")
+},{"./dom":7,"./pathfinding":9,"./reittidata.json":10,"dat.gui":1,"es6-tween":2,"three":4,"three/examples/jsm/controls/OrbitControls.js":5,"three/examples/jsm/loaders/GLTFLoader":6}],9:[function(require,module,exports){
+const reittidata = require("./reittidata.json")
 
 const transformJSON = () => {
     let result = {}
@@ -10146,13 +10143,12 @@ const pathfinding = (from, to) => {
         return
     }
 
-    let unvisited = [...reittidata.pysakit]
+    let unvisited = Object.keys(tiet)
     let route = { nodes: [], time: 0 }
     let history = {
         [from]: { distance: 0, prevNode: from },
     }
     let currNode = from
-    let index = -1
 
     for (let node of unvisited) {
         if (node !== from)
@@ -10193,7 +10189,7 @@ const pathfinding = (from, to) => {
             }
         }
 
-        index = unvisited.indexOf(currNode)
+        let index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
         for (let node in history) {
@@ -10226,9 +10222,9 @@ const pathfinding = (from, to) => {
 
 module.exports = pathfinding
 
-},{"./reittidata":10}],10:[function(require,module,exports){
-const reittidata = {
-    pysakit: [
+},{"./reittidata.json":10}],10:[function(require,module,exports){
+module.exports={
+    "pysakit": [
         "A",
         "B",
         "C",
@@ -10246,147 +10242,146 @@ const reittidata = {
         "O",
         "P",
         "Q",
-        "R",
+        "R"
     ],
-    tiet: [
+    "tiet": [
         {
-            mista: "A",
-            mihin: "B",
-            kesto: 3,
+            "mista": "A",
+            "mihin": "B",
+            "kesto": 3
         },
         {
-            mista: "B",
-            mihin: "D",
-            kesto: 2,
+            "mista": "B",
+            "mihin": "D",
+            "kesto": 2
         },
         {
-            mista: "D",
-            mihin: "A",
-            kesto: 1,
+            "mista": "D",
+            "mihin": "A",
+            "kesto": 1
         },
         {
-            mista: "A",
-            mihin: "C",
-            kesto: 1,
+            "mista": "A",
+            "mihin": "C",
+            "kesto": 1
         },
         {
-            mista: "C",
-            mihin: "D",
-            kesto: 5,
+            "mista": "C",
+            "mihin": "D",
+            "kesto": 5
         },
         {
-            mista: "C",
-            mihin: "E",
-            kesto: 2,
+            "mista": "C",
+            "mihin": "E",
+            "kesto": 2
         },
         {
-            mista: "E",
-            mihin: "D",
-            kesto: 3,
+            "mista": "E",
+            "mihin": "D",
+            "kesto": 3
         },
         {
-            mista: "E",
-            mihin: "F",
-            kesto: 1,
+            "mista": "E",
+            "mihin": "F",
+            "kesto": 1
         },
         {
-            mista: "F",
-            mihin: "G",
-            kesto: 1,
+            "mista": "F",
+            "mihin": "G",
+            "kesto": 1
         },
         {
-            mista: "G",
-            mihin: "H",
-            kesto: 2,
+            "mista": "G",
+            "mihin": "H",
+            "kesto": 2
         },
         {
-            mista: "H",
-            mihin: "I",
-            kesto: 2,
+            "mista": "H",
+            "mihin": "I",
+            "kesto": 2
         },
         {
-            mista: "I",
-            mihin: "J",
-            kesto: 1,
+            "mista": "I",
+            "mihin": "J",
+            "kesto": 1
         },
         {
-            mista: "I",
-            mihin: "G",
-            kesto: 1,
+            "mista": "I",
+            "mihin": "G",
+            "kesto": 1
         },
         {
-            mista: "G",
-            mihin: "K",
-            kesto: 8,
+            "mista": "G",
+            "mihin": "K",
+            "kesto": 8
         },
         {
-            mista: "K",
-            mihin: "L",
-            kesto: 1,
+            "mista": "K",
+            "mihin": "L",
+            "kesto": 1
         },
         {
-            mista: "L",
-            mihin: "M",
-            kesto: 1,
+            "mista": "L",
+            "mihin": "M",
+            "kesto": 1
         },
         {
-            mista: "E",
-            mihin: "M",
-            kesto: 10,
+            "mista": "E",
+            "mihin": "M",
+            "kesto": 10
         },
         {
-            mista: "M",
-            mihin: "N",
-            kesto: 2,
+            "mista": "M",
+            "mihin": "N",
+            "kesto": 2
         },
         {
-            mista: "N",
-            mihin: "O",
-            kesto: 2,
+            "mista": "N",
+            "mihin": "O",
+            "kesto": 2
         },
         {
-            mista: "O",
-            mihin: "P",
-            kesto: 2,
+            "mista": "O",
+            "mihin": "P",
+            "kesto": 2
         },
         {
-            mista: "O",
-            mihin: "Q",
-            kesto: 1,
+            "mista": "O",
+            "mihin": "Q",
+            "kesto": 1
         },
         {
-            mista: "P",
-            mihin: "Q",
-            kesto: 2,
+            "mista": "P",
+            "mihin": "Q",
+            "kesto": 2
         },
         {
-            mista: "N",
-            mihin: "Q",
-            kesto: 1,
+            "mista": "N",
+            "mihin": "Q",
+            "kesto": 1
         },
         {
-            mista: "Q",
-            mihin: "R",
-            kesto: 5,
+            "mista": "Q",
+            "mihin": "R",
+            "kesto": 5
         },
         {
-            mista: "R",
-            mihin: "N",
-            kesto: 3,
+            "mista": "R",
+            "mihin": "N",
+            "kesto": 3
         },
         {
-            mista: "D",
-            mihin: "R",
-            kesto: 6,
-        },
+            "mista": "D",
+            "mihin": "R",
+            "kesto": 6
+        }
     ],
-    linjastot: {
-        keltainen: ["E", "F", "G", "K", "L", "M", "N"],
-        punainen: ["C", "D", "R", "Q", "N", "O", "P"],
-        vihreä: ["D", "B", "A", "C", "E", "F", "G", "H", "I", "J"],
-        sininen: ["D", "E", "M", "N", "O"],
-    },
+    "linjastot": {
+        "keltainen": ["E", "F", "G", "K", "L", "M", "N"],
+        "punainen": ["C", "D", "R", "Q", "N", "O", "P"],
+        "vihreä": ["D", "B", "A", "C", "E", "F", "G", "H", "I", "J"],
+        "sininen": ["D", "E", "M", "N", "O"]
+    }
 }
 
-module.exports = reittidata;
 },{}]},{},[8]);

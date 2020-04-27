@@ -1,4 +1,4 @@
-const reittidata = require("./reittidata")
+const reittidata = require("./reittidata.json")
 
 const transformJSON = () => {
     let result = {}
@@ -48,13 +48,12 @@ const pathfinding = (from, to) => {
         return
     }
 
-    let unvisited = [...reittidata.pysakit]
+    let unvisited = Object.keys(tiet)
     let route = { nodes: [], time: 0 }
     let history = {
         [from]: { distance: 0, prevNode: from },
     }
     let currNode = from
-    let index = -1
 
     for (let node of unvisited) {
         if (node !== from)
@@ -95,7 +94,7 @@ const pathfinding = (from, to) => {
             }
         }
 
-        index = unvisited.indexOf(currNode)
+        let index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
         for (let node in history) {
