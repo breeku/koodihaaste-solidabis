@@ -10153,15 +10153,12 @@ const pathfinding = (from, to) => {
     }
 
     let unvisited = [...reittidata.pysakit]
-    let visited = []
     let route = { nodes: [], time: 0 }
     let history = {
         [from]: { distance: 0, prevNode: from },
     }
     let currNode = from
     let index = -1
-    let notVisitedNeighbors = []
-    let next = null
 
     for (let node of unvisited) {
         if (node !== from)
@@ -10171,96 +10168,53 @@ const pathfinding = (from, to) => {
             }
     }
 
-    let i = 0
-
-    while (unvisited.length > 0 || notVisitedNeighbors.length > 0) {
+    while (unvisited.length > 0) {
         let neighbors = tiet[currNode]
-        for (let node in history) {
-            for (let neighbor in neighbors) {
-                if (node === neighbor) {
-                    if (currNode === from) {
-                        history = {
-                            ...history,
-                            [node]: {
-                                distance: neighbors[node],
-                                prevNode: currNode,
-                            },
-                        }
-                    } else {
-                        let totalDistance =
-                            history[currNode].distance + neighbors[node]
-                        if (
-                            history[neighbor].distance === Infinity ||
-                            history[neighbor].distance >= totalDistance
-                        ) {
-                            //console.log(node + ":" + "{ distance: " + totalDistance + ", prevNode: " + currNode + "}")
-                            history = {
-                                ...history,
-                                [node]: {
-                                    distance: totalDistance,
-                                    prevNode: currNode,
-                                },
-                            }
-                        }
+        let next = null
+
+        for (let neighbor in neighbors) {
+            if (neighbor === from) {
+                history = {
+                    ...history,
+                    [neighbor]: {
+                        distance: neighbors[neighbor],
+                        prevNode: currNode,
+                    },
+                }
+            } else {
+                let totalDistance = history[currNode].distance + neighbors[neighbor]
+                let neighborDistance = history[neighbor].distance
+                if (
+                    neighborDistance === Infinity ||
+                    neighborDistance >= totalDistance
+                ) {
+                    history = {
+                        ...history,
+                        [neighbor]: {
+                            distance: totalDistance,
+                            prevNode: currNode,
+                        },
                     }
                 }
             }
         }
 
-        let smallest = Infinity
-        for (let node in neighbors) {
-            // go to the neighbor that has the smallest distance
+        index = unvisited.indexOf(currNode)
+        if (index !== -1) unvisited.splice(index, 1)
+
+        for (let node in history) {
             if (
-                neighbors[node] <= smallest &&
-                unvisited.find((x) => x === node) &&
-                notVisitedNeighbors.find((x) => x === node) // <-- ?
+                (next === null ||
+                    history[node].distance < history[next].distance) &&
+                unvisited.find((x) => x === node)
             ) {
-                smallest = neighbors[node]
                 next = node
             }
         }
 
-        if (next === currNode) {
-            // search from visited list for nodes that have unvisited neighbors
-            if (notVisitedNeighbors.length === 0) {
-                for (let node of visited) {
-                    neighbors = tiet[node]
-                    for (let neighbor in neighbors) {
-                        if (unvisited.find((x) => x === neighbor)) {
-                            notVisitedNeighbors.push(neighbor)
-                        }
-                    }
-                }
-            }
-
-            if (
-                notVisitedNeighbors.length > 0 || next === currNode
-            ) {
-                next = notVisitedNeighbors[0]
-                notVisitedNeighbors.splice(0, 1)
-            }
-        }
-
-        if (next === null) {
-            // if no more neighbors to be found, go to previous node
-            if (history[currNode]) {
-                next = history[currNode].prevNode
-            } else {
-                console.error("cannot go back to " + currNode)
-                return
-            }
-        }
-
-        visited.push(currNode)
-        index = unvisited.indexOf(currNode)
-        if (index !== -1) unvisited.splice(index, 1)
-
         currNode = next
-        i++
     }
 
-    console.log('Looped ' + i + ' times.')
-    
     let temp = to
 
     let reversedRoute = [temp]
