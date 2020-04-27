@@ -1,11 +1,12 @@
-import * as THREE from "three"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
-import * as dat from "dat.gui"
-import { pathfinding } from "./pathfinding"
-import { reittidata } from "./reittidata"
-import * as TWEEN from "es6-tween"
-import { updateTravelInfo } from "./dom"
+const THREE = require("three")
+const { GLTFLoader } = require("three/examples/jsm/loaders/GLTFLoader")
+const { OrbitControls } = require("three/examples/jsm/controls/OrbitControls.js")
+const dat = require("dat.gui")
+const TWEEN = require("es6-tween")
+
+const updateTravelInfo = require("./dom")
+const reittidata = require("./reittidata")
+const pathfinding = require('./pathfinding');
 
 let controls, scene, renderer, camera, route, goal, spacecraft
 let temp = new THREE.Vector3()
@@ -205,9 +206,14 @@ const init = () => {
     scene.background = new THREE.Color(0xefd1b5)
     scene.fog = new THREE.FogExp2(0xefd1b5, 0.02)
 
-    let directionalLight = new THREE.DirectionalLight(0xefd1b5, 1)
-    directionalLight.position.y = 30
-    scene.add(directionalLight)
+    let hemilight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 0.75)
+    hemilight.castShadow = true
+    scene.add(hemilight)
+
+    let spotlight = new THREE.SpotLight(0xffa95c, 0.1)
+    spotlight.position.y = 20
+    spotlight.castShadow = true
+    scene.add(spotlight)
 
     camera = new THREE.PerspectiveCamera(
         75,

@@ -1,4 +1,4 @@
-import { reittidata } from "./reittidata"
+const reittidata = require("./reittidata")
 
 const transformJSON = () => {
     let result = {}
@@ -42,7 +42,7 @@ const transformJSON = () => {
 
 const tiet = transformJSON()
 
-export const pathfinding = (from, to) => {
+const pathfinding = (from, to) => {
     if (from === "" || to === "" || from === to) {
         console.error("No route provided")
         return
@@ -56,7 +56,7 @@ export const pathfinding = (from, to) => {
     }
     let currNode = from
     let index = -1
-    let noVisitedNeighbors = []
+    let notVisitedNeighbors = []
     let next = null
 
     for (let node of unvisited) {
@@ -66,10 +66,11 @@ export const pathfinding = (from, to) => {
                 [node]: { distance: Infinity, prevNode: null },
             }
     }
-    while (unvisited.length > 0 || noVisitedNeighbors.length > 0) {
-        let neighbors = tiet[currNode]
-        let smallest = Infinity
 
+    let i = 0
+
+    while (unvisited.length > 0 || notVisitedNeighbors.length > 0) {
+        let neighbors = tiet[currNode]
         for (let node in history) {
             for (let neighbor in neighbors) {
                 if (node === neighbor) {
@@ -85,9 +86,10 @@ export const pathfinding = (from, to) => {
                         let totalDistance =
                             history[currNode].distance + neighbors[node]
                         if (
-                            history[neighbor].distance === null ||
+                            history[neighbor].distance === Infinity ||
                             history[neighbor].distance >= totalDistance
                         ) {
+                            //console.log(node + ":" + "{ distance: " + totalDistance + ", prevNode: " + currNode + "}")
                             history = {
                                 ...history,
                                 [node]: {
@@ -105,6 +107,7 @@ export const pathfinding = (from, to) => {
         index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
+        let smallest = Infinity
         for (let node in neighbors) {
             // go to the neighbor that has the smallest distance
             if (
@@ -112,10 +115,31 @@ export const pathfinding = (from, to) => {
                 unvisited.find((x) => x === node)
             ) {
                 smallest = neighbors[node]
-                next = node
+                next = neighbors[node]
             }
         }
+        /*
+        if (next === currNode) {
+            // search from visited list for nodes that have unvisited neighbors
+            if (notVisitedNeighbors.length === 0) {
+                for (let node of visited) {
+                    neighbors = tiet[node]
+                    for (let neighbor in neighbors) {
+                        if (unvisited.find((x) => x === neighbor)) {
+                            notVisitedNeighbors.push(neighbor)
+                        }
+                    }
+                }
+            }
 
+            if (
+                notVisitedNeighbors.length > 0 || next === currNode
+            ) {
+                next = notVisitedNeighbors[0]
+                notVisitedNeighbors.splice(0, 1)
+            }
+        }
+        */
         if (next === null) {
             // if no more neighbors to be found, go to previous node
             if (history[currNode]) {
@@ -126,28 +150,12 @@ export const pathfinding = (from, to) => {
             }
         }
 
-        if (currNode === next) {
-            // if the previous node is the same as current node, search for nodes that have unvisited neighbors
-            if (noVisitedNeighbors.length > 0) {
-                next = noVisitedNeighbors[0]
-                noVisitedNeighbors.splice(0, 1)
-            } else {
-                for (let node of visited) {
-                    neighbors = tiet[node]
-                    for (let neighbor in neighbors) {
-                        if (unvisited.find((x) => x === neighbor)) {
-                            noVisitedNeighbors.push(neighbor)
-                        }
-                    }
-                }
-            }
-        }
-
         currNode = next
+        i++
     }
 
-    console.log(history)
-
+    console.log('Looped ' + i + ' times.')
+    
     let temp = to
 
     let reversedRoute = [temp]
@@ -160,6 +168,7 @@ export const pathfinding = (from, to) => {
     reversedRoute.reverse()
     route = { nodes: reversedRoute, time: history[to].distance }
 
-    console.log(route)
     return route
 }
+
+module.exports = pathfinding

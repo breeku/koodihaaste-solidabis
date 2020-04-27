@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "watchify src/js/index.js -o static/bundle.js -p esmify"
   },
   "keywords": [],
@@ -18,5 +18,8 @@
     "esmify": "^2.1.1",
     "three": "^0.115.0",
     "watchify": "^3.11.1"
+  },
+  "devDependencies": {
+    "jest": "^25.4.0"
   }
 }

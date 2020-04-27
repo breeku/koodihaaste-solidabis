@@ -1,4 +1,4 @@
-export const reittidata = {
+const reittidata = {
     pysakit: [
         "A",
         "B",
@@ -158,3 +158,5 @@ export const reittidata = {
         sininen: ["D", "E", "M", "N", "O"],
     },
 }
+
+module.exports = reittidata;

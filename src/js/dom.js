@@ -1,4 +1,4 @@
-export const updateTravelInfo = (route, lines) => {
+const updateTravelInfo = (route, lines) => {
     let travelInfo = document.getElementById('travelInfo');
     travelInfo.innerHTML = ""
     for (let node of route.nodes) {
@@ -16,3 +16,5 @@ export const updateTravelInfo = (route, lines) => {
         }
     }
 }
+
+module.exports = updateTravelInfo
