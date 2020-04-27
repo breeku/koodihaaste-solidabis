@@ -9751,7 +9751,17 @@ const updateTravelInfo = (route, lines) => {
     }
 }
 
-module.exports = updateTravelInfo
+const updateLoading = data => {
+    let loadingDOM = document.getElementById('loading')
+    loadingDOM.innerHTML = "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal 
+}
+
+const removeLoading = () => {
+    let loadingDOM = document.getElementById('loading')
+    loadingDOM.style.opacity = 0
+}
+
+module.exports = {updateTravelInfo, updateLoading, removeLoading}
 },{}],8:[function(require,module,exports){
 const THREE = require("three")
 const { GLTFLoader } = require("three/examples/jsm/loaders/GLTFLoader")
@@ -9759,7 +9769,7 @@ const { OrbitControls } = require("three/examples/jsm/controls/OrbitControls.js"
 const dat = require("dat.gui")
 const TWEEN = require("es6-tween")
 
-const updateTravelInfo = require("./dom")
+const {updateLoading, removeLoading, updateTravelInfo} = require("./dom")
 const reittidata = require("./reittidata")
 const pathfinding = require('./pathfinding');
 
@@ -9985,32 +9995,16 @@ const init = () => {
 
     let manager = new THREE.LoadingManager()
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
-        console.log(
-            "Started loading file: " +
-                url +
-                ".\nLoaded " +
-                itemsLoaded +
-                " of " +
-                itemsTotal +
-                " files."
-        )
+        updateLoading({url, itemsLoaded, itemsTotal})
     }
 
     manager.onLoad = function () {
-        console.log("Loading complete!")
+        removeLoading()
         addLines()
     }
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        console.log(
-            "Loading file: " +
-                url +
-                ".\nLoaded " +
-                itemsLoaded +
-                " of " +
-                itemsTotal +
-                " files."
-        )
+        updateLoading({url, itemsLoaded, itemsTotal})
     }
 
     manager.onError = function (url) {

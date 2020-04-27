@@ -28,10 +28,27 @@
                 background-color: rgba(0, 0, 0, 0.2);
                 color: whitesmoke;
             }
+            #loading {
+                text-align: center;
+                z-index: 1;
+                pointer-events: none;
+                display: block;
+                color: whitesmoke;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 4em;
+                opacity: 1;
+                transition: all .5s;
+                border-radius: 5px;
+                padding: 10px;
+            }
         </style>
     </head>
     <body>
         <div id="travelInfo"></div>
+        <div id="loading"></div>
         <script src="./static/bundle.js"></script>
     </body>
 </html>

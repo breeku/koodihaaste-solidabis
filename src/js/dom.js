@@ -17,4 +17,14 @@ const updateTravelInfo = (route, lines) => {
     }
 }
 
-module.exports = updateTravelInfo
+const updateLoading = data => {
+    let loadingDOM = document.getElementById('loading')
+    loadingDOM.innerHTML = "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal 
+}
+
+const removeLoading = () => {
+    let loadingDOM = document.getElementById('loading')
+    loadingDOM.style.opacity = 0
+}
+
+module.exports = {updateTravelInfo, updateLoading, removeLoading}
