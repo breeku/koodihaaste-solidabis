@@ -1,12 +1,14 @@
 const THREE = require("three")
 const { GLTFLoader } = require("three/examples/jsm/loaders/GLTFLoader")
-const { OrbitControls } = require("three/examples/jsm/controls/OrbitControls.js")
+const {
+    OrbitControls,
+} = require("three/examples/jsm/controls/OrbitControls.js")
 const dat = require("dat.gui")
 const TWEEN = require("es6-tween")
 
-const {updateLoading, removeLoading, updateTravelInfo} = require("./dom")
+const { updateLoading, removeLoading, updateTravelInfo } = require("./dom")
 const reittidata = require("./reittidata.json")
-const pathfinding = require('./pathfinding');
+const pathfinding = require("./pathfinding")
 
 let controls, scene, renderer, camera, route, goal, spacecraft
 let temp = new THREE.Vector3()
@@ -31,7 +33,9 @@ let travel = {
     },
 }
 
-const gui = new dat.GUI()
+const gui = new dat.GUI({ autoPlace: false })
+let gc = document.getElementById('gui');
+gc.appendChild(gui.domElement);
 
 let routingGUI = gui.addFolder("Routing")
 routingGUI.open()
@@ -112,7 +116,8 @@ const blinkLines = () => {
 const goRoute = (route, target = spacecraft) => {
     if (route === null) return
     let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
-    let startingPosition = map.children.find((x) => x.name === route.nodes[0])
+    let startingPosition = map.children
+        .find((x) => x.name === route.nodes[0])
         .position.clone()
     target.position.set(
         startingPosition.x,
@@ -227,7 +232,7 @@ const init = () => {
 
     let manager = new THREE.LoadingManager()
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
-        updateLoading({url, itemsLoaded, itemsTotal})
+        updateLoading({ url, itemsLoaded, itemsTotal })
     }
 
     manager.onLoad = function () {
@@ -236,7 +241,7 @@ const init = () => {
     }
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        updateLoading({url, itemsLoaded, itemsTotal})
+        updateLoading({ url, itemsLoaded, itemsTotal })
     }
 
     manager.onError = function (url) {
@@ -280,10 +285,10 @@ const init = () => {
 }
 
 let onWindowResize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 window.addEventListener("resize", onWindowResize)

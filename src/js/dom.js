@@ -1,6 +1,15 @@
+const colors = {
+    keltainen: '<span style="color: yellow">keltainen</span>',
+    punainen: '<span style="color: darkred">punainen</span>',
+    vihreä: '<span style="color: lightgreen">vihreä</span>',
+    sininen: '<span style="color: blue">sininen</span>',
+}
+const travelInfo = document.getElementById('travelInfo');
+const loadingDOM = document.getElementById('loading')
+
 const updateTravelInfo = (route, lines) => {
-    let travelInfo = document.getElementById('travelInfo');
-    travelInfo.innerHTML = ""
+    let string = ""
+    travelInfo.style.opacity = 0
     for (let node of route.nodes) {
         let index = route.nodes.indexOf(node)
         let color = ""
@@ -10,20 +19,23 @@ const updateTravelInfo = (route, lines) => {
             }
         }
         if (color !== "") {
-            travelInfo.innerHTML += node + " -> " + route.nodes[index + 1] + " = " + color + ". "
+            string += node + " -> " + route.nodes[index + 1] + " = " + colors[color] + ". "
         } else {
-            travelInfo.innerHTML += "Kesto " + route.time + "."
+            string += "Kesto " + route.time + "."
         }
     }
+    setTimeout(() => {
+        travelInfo.style.opacity = 1
+        travelInfo.innerHTML = string
+    }, 500)
+
 }
 
 const updateLoading = data => {
-    let loadingDOM = document.getElementById('loading')
     loadingDOM.innerHTML = "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal 
 }
 
 const removeLoading = () => {
-    let loadingDOM = document.getElementById('loading')
     loadingDOM.style.opacity = 0
 }
 

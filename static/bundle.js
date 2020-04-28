@@ -9732,9 +9732,18 @@ var GLTFLoader = function () {
 exports.GLTFLoader = GLTFLoader;
 
 },{"../../../build/three.module.js":4}],7:[function(require,module,exports){
+const colors = {
+    keltainen: '<span style="color: yellow">keltainen</span>',
+    punainen: '<span style="color: darkred">punainen</span>',
+    vihreä: '<span style="color: lightgreen">vihreä</span>',
+    sininen: '<span style="color: blue">sininen</span>',
+}
+const travelInfo = document.getElementById('travelInfo');
+const loadingDOM = document.getElementById('loading')
+
 const updateTravelInfo = (route, lines) => {
-    let travelInfo = document.getElementById('travelInfo');
-    travelInfo.innerHTML = ""
+    let string = ""
+    travelInfo.style.opacity = 0
     for (let node of route.nodes) {
         let index = route.nodes.indexOf(node)
         let color = ""
@@ -9744,20 +9753,23 @@ const updateTravelInfo = (route, lines) => {
             }
         }
         if (color !== "") {
-            travelInfo.innerHTML += node + " -> " + route.nodes[index + 1] + " = " + color + ". "
+            string += node + " -> " + route.nodes[index + 1] + " = " + colors[color] + ". "
         } else {
-            travelInfo.innerHTML += "Kesto " + route.time + "."
+            string += "Kesto " + route.time + "."
         }
     }
+    setTimeout(() => {
+        travelInfo.style.opacity = 1
+        travelInfo.innerHTML = string
+    }, 500)
+
 }
 
 const updateLoading = data => {
-    let loadingDOM = document.getElementById('loading')
     loadingDOM.innerHTML = "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal 
 }
 
 const removeLoading = () => {
-    let loadingDOM = document.getElementById('loading')
     loadingDOM.style.opacity = 0
 }
 
@@ -9765,13 +9777,15 @@ module.exports = {updateTravelInfo, updateLoading, removeLoading}
 },{}],8:[function(require,module,exports){
 const THREE = require("three")
 const { GLTFLoader } = require("three/examples/jsm/loaders/GLTFLoader")
-const { OrbitControls } = require("three/examples/jsm/controls/OrbitControls.js")
+const {
+    OrbitControls,
+} = require("three/examples/jsm/controls/OrbitControls.js")
 const dat = require("dat.gui")
 const TWEEN = require("es6-tween")
 
-const {updateLoading, removeLoading, updateTravelInfo} = require("./dom")
+const { updateLoading, removeLoading, updateTravelInfo } = require("./dom")
 const reittidata = require("./reittidata.json")
-const pathfinding = require('./pathfinding');
+const pathfinding = require("./pathfinding")
 
 let controls, scene, renderer, camera, route, goal, spacecraft
 let temp = new THREE.Vector3()
@@ -9796,7 +9810,9 @@ let travel = {
     },
 }
 
-const gui = new dat.GUI()
+const gui = new dat.GUI({ autoPlace: false })
+let gc = document.getElementById('gui');
+gc.appendChild(gui.domElement);
 
 let routingGUI = gui.addFolder("Routing")
 routingGUI.open()
@@ -9877,7 +9893,8 @@ const blinkLines = () => {
 const goRoute = (route, target = spacecraft) => {
     if (route === null) return
     let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
-    let startingPosition = map.children.find((x) => x.name === route.nodes[0])
+    let startingPosition = map.children
+        .find((x) => x.name === route.nodes[0])
         .position.clone()
     target.position.set(
         startingPosition.x,
@@ -9992,7 +10009,7 @@ const init = () => {
 
     let manager = new THREE.LoadingManager()
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
-        updateLoading({url, itemsLoaded, itemsTotal})
+        updateLoading({ url, itemsLoaded, itemsTotal })
     }
 
     manager.onLoad = function () {
@@ -10001,7 +10018,7 @@ const init = () => {
     }
 
     manager.onProgress = function (url, itemsLoaded, itemsTotal) {
-        updateLoading({url, itemsLoaded, itemsTotal})
+        updateLoading({ url, itemsLoaded, itemsTotal })
     }
 
     manager.onError = function (url) {
@@ -10045,10 +10062,10 @@ const init = () => {
 }
 
 let onWindowResize = () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight
+    camera.updateProjectionMatrix()
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize(window.innerWidth, window.innerHeight)
 }
 
 window.addEventListener("resize", onWindowResize)
