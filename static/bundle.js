@@ -9738,22 +9738,31 @@ const colors = {
     vihreä: '<span style="color: lightgreen">vihreä</span>',
     sininen: '<span style="color: blue">sininen</span>',
 }
-const travelInfo = document.getElementById('travelInfo');
-const loadingDOM = document.getElementById('loading')
+const travelInfo = document.getElementById("travelInfo")
+const loadingDOM = document.getElementById("loading")
 
 const updateTravelInfo = (route, lines) => {
     let string = ""
     travelInfo.style.opacity = 0
-    for (let node of route.nodes) {
-        let index = route.nodes.indexOf(node)
+    for (const node of route.nodes) {
+        const index = route.nodes.indexOf(node)
         let color = ""
         for (let c in lines) {
-            if (lines[c].find(x => x === node) && lines[c].find(x => x === route.nodes[index + 1])) {
+            if (
+                lines[c].find((x) => x === node) &&
+                lines[c].find((x) => x === route.nodes[index + 1])
+            ) {
                 color = c
             }
         }
         if (color !== "") {
-            string += node + " -> " + route.nodes[index + 1] + " = " + colors[color] + ". "
+            string +=
+                node +
+                " -> " +
+                route.nodes[index + 1] +
+                " = " +
+                colors[color] +
+                ". "
         } else {
             string += "Kesto " + route.time + "."
         }
@@ -9762,18 +9771,19 @@ const updateTravelInfo = (route, lines) => {
         travelInfo.style.opacity = 1
         travelInfo.innerHTML = string
     }, 500)
-
 }
 
-const updateLoading = data => {
-    loadingDOM.innerHTML = "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal 
+const updateLoading = (data) => {
+    loadingDOM.innerHTML =
+        "Loading..." + "<br>" + data.itemsLoaded + "/" + data.itemsTotal
 }
 
 const removeLoading = () => {
     loadingDOM.style.opacity = 0
 }
 
-module.exports = {updateTravelInfo, updateLoading, removeLoading}
+module.exports = { updateTravelInfo, updateLoading, removeLoading }
+
 },{}],8:[function(require,module,exports){
 const THREE = require("three")
 const { GLTFLoader } = require("three/examples/jsm/loaders/GLTFLoader")
@@ -9796,14 +9806,14 @@ let previousFrameBlinked = false
 
 let highlighted = false
 
-let nodeList = reittidata.pysakit
-let cameraOptions = { chase: "Chase", orbital: "Orbital" }
+const nodeList = reittidata.pysakit
+const cameraOptions = { chase: "Chase", orbital: "Orbital" }
 
 let cameraMode = cameraOptions.orbital
 
-let directions = { from: "", to: "" }
+const directions = { from: "", to: "" }
 let cameraChosen = { mode: cameraOptions.orbital }
-let travel = {
+const travel = {
     travel: () => {
         unhighlight()
         goRoute(route)
@@ -9811,17 +9821,17 @@ let travel = {
 }
 
 const gui = new dat.GUI({ autoPlace: false })
-let gc = document.getElementById('gui');
+const gc = document.getElementById('gui');
 gc.appendChild(gui.domElement);
 
-let routingGUI = gui.addFolder("Routing")
+const routingGUI = gui.addFolder("Routing")
 routingGUI.open()
-let fromGUI = routingGUI.add(directions, "from", nodeList)
-let toGUI = routingGUI.add(directions, "to", nodeList)
+const fromGUI = routingGUI.add(directions, "from", nodeList)
+const toGUI = routingGUI.add(directions, "to", nodeList)
 routingGUI.add(travel, "travel")
 
-let cameraGUI = gui.addFolder("Camera")
-let optionsGUI = cameraGUI.add(cameraChosen, "mode", cameraOptions)
+const cameraGUI = gui.addFolder("Camera")
+const optionsGUI = cameraGUI.add(cameraChosen, "mode", cameraOptions)
 
 fromGUI.onChange((value) => {
     if (highlighted) {
@@ -9854,7 +9864,7 @@ optionsGUI.onChange((value) => {
 
 const highlight = (route) => {
     updateTravelInfo(route, reittidata.linjastot)
-    let material = new THREE.LineBasicMaterial({ color: 0xffffff })
+    const material = new THREE.LineBasicMaterial({ color: 0xffffff })
     for (let i = 0; i < route.nodes.length; i++) {
         let lines = scene.children.filter(
             (x) =>
@@ -9892,8 +9902,8 @@ const blinkLines = () => {
 
 const goRoute = (route, target = spacecraft) => {
     if (route === null) return
-    let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
-    let startingPosition = map.children
+    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const startingPosition = map.children
         .find((x) => x.name === route.nodes[0])
         .position.clone()
     target.position.set(
@@ -9902,12 +9912,12 @@ const goRoute = (route, target = spacecraft) => {
         startingPosition.z
     )
 
-    let tweens = []
+    const tweens = []
 
-    for (let stop of route.nodes) {
-        let index = route.nodes.indexOf(stop)
-        let coord = map.children.find((x) => x.name === stop).position.clone()
-        let tween = new TWEEN.Tween(target.position).to(coord, 1000)
+    for (const stop of route.nodes) {
+        const index = route.nodes.indexOf(stop)
+        const coord = map.children.find((x) => x.name === stop).position.clone()
+        const tween = new TWEEN.Tween(target.position).to(coord, 1000)
 
         if (index !== 0 && index !== route.nodes.length - 1) {
             coord.y = 3
@@ -9931,34 +9941,29 @@ const goRoute = (route, target = spacecraft) => {
 }
 
 const addLines = () => {
-    let keltainen = new THREE.LineBasicMaterial({ color: 0xffff00 })
-    let punainen = new THREE.LineBasicMaterial({ color: 0xff0000 })
-    let vihreä = new THREE.LineBasicMaterial({ color: 0x328332 })
-    let sininen = new THREE.LineBasicMaterial({ color: 0x0000ff })
-
-    let colors = {
-        keltainen,
-        punainen,
-        vihreä,
-        sininen,
+    const colors = {
+        keltainen: new THREE.LineBasicMaterial({ color: 0xffff00 }),
+        punainen: new THREE.LineBasicMaterial({ color: 0xff0000 }),
+        vihreä: new THREE.LineBasicMaterial({ color: 0x328332 }),
+        sininen: new THREE.LineBasicMaterial({ color: 0x0000ff }),
     }
 
-    let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
 
-    for (let tie of reittidata.tiet) {
-        let coord1 = map.children.find((x) => x.name === tie.mista).position
-        let coord2 = map.children.find((x) => x.name === tie.mihin).position
-        let points = []
+    for (const tie of reittidata.tiet) {
+        const coord1 = map.children.find((x) => x.name === tie.mista).position
+        const coord2 = map.children.find((x) => x.name === tie.mihin).position
+        const points = []
         points.push(coord1)
         points.push(coord2)
-        let geometry = new THREE.BufferGeometry().setFromPoints(points)
+        const geometry = new THREE.BufferGeometry().setFromPoints(points)
 
-        for (let color in reittidata.linjastot) {
-            let colored = reittidata.linjastot[color].filter(
+        for (const color in reittidata.linjastot) {
+            const colored = reittidata.linjastot[color].filter(
                 (x) => x === tie.mista || x === tie.mihin
             )
             if (colored.length > 1) {
-                let line = new THREE.Line(geometry, colors[color])
+                const line = new THREE.Line(geometry, colors[color])
                 line.position.y = 0.5
                 line.name = tie.mista + " - " + tie.mihin
                 if (color === "keltainen") {
@@ -9985,11 +9990,11 @@ const init = () => {
     scene.background = new THREE.Color(0xefd1b5)
     scene.fog = new THREE.FogExp2(0xefd1b5, 0.02)
 
-    let hemilight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 0.75)
+    const hemilight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 0.75)
     hemilight.castShadow = true
     scene.add(hemilight)
 
-    let spotlight = new THREE.SpotLight(0xffa95c, 0.1)
+    const spotlight = new THREE.SpotLight(0xffa95c, 0.1)
     spotlight.position.y = 20
     spotlight.castShadow = true
     scene.add(spotlight)
@@ -10007,7 +10012,7 @@ const init = () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    let manager = new THREE.LoadingManager()
+    const manager = new THREE.LoadingManager()
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
         updateLoading({ url, itemsLoaded, itemsTotal })
     }
@@ -10025,7 +10030,7 @@ const init = () => {
         console.log("There was an error loading " + url)
     }
 
-    let loader = new GLTFLoader(manager)
+    const loader = new GLTFLoader(manager)
     loader.load(
         "../../static/models/map.glb",
         function (gltf) {
@@ -10074,8 +10079,8 @@ let animate = function (t) {
     requestAnimationFrame(animate)
 
     if (highlighted) {
-        let deltaTime = clock.getDelta()
-        let blink = Math.floor(time / 0.5) & 1
+        const deltaTime = clock.getDelta()
+        const blink = Math.floor(time / 0.5) & 1
 
         if (previousFrameBlinked !== blink) {
             blinkLines()
@@ -10086,7 +10091,7 @@ let animate = function (t) {
         time += deltaTime
     }
 
-    if (controls.enabled) {
+    if (cameraMode === "Orbital") {
         controls.update()
     }
 
@@ -10116,7 +10121,7 @@ const transformJSON = () => {
 
     for (let value of reittidata.tiet) {
         let reitit = {}
-        let tiet = reittidata.tiet.filter(
+        const tiet = reittidata.tiet.filter(
             (x) => value.mista === x.mista || value.mista === x.mihin
         )
         for (let tie of tiet) {
@@ -10133,8 +10138,8 @@ const transformJSON = () => {
         result = { ...result, [value.mista]: reitit }
     }
 
-    for (let reitti in result) {
-        for (let node in result[reitti]) {
+    for (const reitti in result) {
+        for (const node in result[reitti]) {
             if (!result[node]) {
                 result[node] = {
                     ...result[node],
@@ -10155,14 +10160,14 @@ const pathfinding = (from, to) => {
         return
     }
 
-    let unvisited = Object.keys(tiet)
+    const unvisited = Object.keys(tiet)
     let route = { nodes: [], time: 0 }
     let history = {
         [from]: { distance: 0, prevNode: from },
     }
     let currNode = from
 
-    for (let node of unvisited) {
+    for (const node of unvisited) {
         if (node !== from)
             history = {
                 ...history,
@@ -10171,10 +10176,10 @@ const pathfinding = (from, to) => {
     }
 
     while (unvisited.length > 0) {
-        let neighbors = tiet[currNode]
+        const neighbors = tiet[currNode]
         let next = null
 
-        for (let neighbor in neighbors) {
+        for (const neighbor in neighbors) {
             if (neighbor === from) {
                 history = {
                     ...history,
@@ -10184,8 +10189,8 @@ const pathfinding = (from, to) => {
                     },
                 }
             } else {
-                let totalDistance = history[currNode].distance + neighbors[neighbor]
-                let neighborDistance = history[neighbor].distance
+                const totalDistance = history[currNode].distance + neighbors[neighbor]
+                const neighborDistance = history[neighbor].distance
                 if (
                     neighborDistance === Infinity ||
                     neighborDistance >= totalDistance
@@ -10201,10 +10206,10 @@ const pathfinding = (from, to) => {
             }
         }
 
-        let index = unvisited.indexOf(currNode)
+        const index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
-        for (let node in history) {
+        for (const node in history) {
             if (
                 (next === null ||
                     history[node].distance < history[next].distance) &&
@@ -10219,7 +10224,7 @@ const pathfinding = (from, to) => {
 
     let temp = to
 
-    let reversedRoute = [temp]
+    const reversedRoute = [temp]
 
     while (temp !== from) {
         temp = history[temp].prevNode

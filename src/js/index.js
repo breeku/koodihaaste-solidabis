@@ -19,14 +19,14 @@ let previousFrameBlinked = false
 
 let highlighted = false
 
-let nodeList = reittidata.pysakit
-let cameraOptions = { chase: "Chase", orbital: "Orbital" }
+const nodeList = reittidata.pysakit
+const cameraOptions = { chase: "Chase", orbital: "Orbital" }
 
 let cameraMode = cameraOptions.orbital
 
-let directions = { from: "", to: "" }
+const directions = { from: "", to: "" }
 let cameraChosen = { mode: cameraOptions.orbital }
-let travel = {
+const travel = {
     travel: () => {
         unhighlight()
         goRoute(route)
@@ -34,17 +34,17 @@ let travel = {
 }
 
 const gui = new dat.GUI({ autoPlace: false })
-let gc = document.getElementById('gui');
+const gc = document.getElementById('gui');
 gc.appendChild(gui.domElement);
 
-let routingGUI = gui.addFolder("Routing")
+const routingGUI = gui.addFolder("Routing")
 routingGUI.open()
-let fromGUI = routingGUI.add(directions, "from", nodeList)
-let toGUI = routingGUI.add(directions, "to", nodeList)
+const fromGUI = routingGUI.add(directions, "from", nodeList)
+const toGUI = routingGUI.add(directions, "to", nodeList)
 routingGUI.add(travel, "travel")
 
-let cameraGUI = gui.addFolder("Camera")
-let optionsGUI = cameraGUI.add(cameraChosen, "mode", cameraOptions)
+const cameraGUI = gui.addFolder("Camera")
+const optionsGUI = cameraGUI.add(cameraChosen, "mode", cameraOptions)
 
 fromGUI.onChange((value) => {
     if (highlighted) {
@@ -77,7 +77,7 @@ optionsGUI.onChange((value) => {
 
 const highlight = (route) => {
     updateTravelInfo(route, reittidata.linjastot)
-    let material = new THREE.LineBasicMaterial({ color: 0xffffff })
+    const material = new THREE.LineBasicMaterial({ color: 0xffffff })
     for (let i = 0; i < route.nodes.length; i++) {
         let lines = scene.children.filter(
             (x) =>
@@ -115,8 +115,8 @@ const blinkLines = () => {
 
 const goRoute = (route, target = spacecraft) => {
     if (route === null) return
-    let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
-    let startingPosition = map.children
+    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const startingPosition = map.children
         .find((x) => x.name === route.nodes[0])
         .position.clone()
     target.position.set(
@@ -125,12 +125,12 @@ const goRoute = (route, target = spacecraft) => {
         startingPosition.z
     )
 
-    let tweens = []
+    const tweens = []
 
-    for (let stop of route.nodes) {
-        let index = route.nodes.indexOf(stop)
-        let coord = map.children.find((x) => x.name === stop).position.clone()
-        let tween = new TWEEN.Tween(target.position).to(coord, 1000)
+    for (const stop of route.nodes) {
+        const index = route.nodes.indexOf(stop)
+        const coord = map.children.find((x) => x.name === stop).position.clone()
+        const tween = new TWEEN.Tween(target.position).to(coord, 1000)
 
         if (index !== 0 && index !== route.nodes.length - 1) {
             coord.y = 3
@@ -154,34 +154,29 @@ const goRoute = (route, target = spacecraft) => {
 }
 
 const addLines = () => {
-    let keltainen = new THREE.LineBasicMaterial({ color: 0xffff00 })
-    let punainen = new THREE.LineBasicMaterial({ color: 0xff0000 })
-    let vihreä = new THREE.LineBasicMaterial({ color: 0x328332 })
-    let sininen = new THREE.LineBasicMaterial({ color: 0x0000ff })
-
-    let colors = {
-        keltainen,
-        punainen,
-        vihreä,
-        sininen,
+    const colors = {
+        keltainen: new THREE.LineBasicMaterial({ color: 0xffff00 }),
+        punainen: new THREE.LineBasicMaterial({ color: 0xff0000 }),
+        vihreä: new THREE.LineBasicMaterial({ color: 0x328332 }),
+        sininen: new THREE.LineBasicMaterial({ color: 0x0000ff }),
     }
 
-    let map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
 
-    for (let tie of reittidata.tiet) {
-        let coord1 = map.children.find((x) => x.name === tie.mista).position
-        let coord2 = map.children.find((x) => x.name === tie.mihin).position
-        let points = []
+    for (const tie of reittidata.tiet) {
+        const coord1 = map.children.find((x) => x.name === tie.mista).position
+        const coord2 = map.children.find((x) => x.name === tie.mihin).position
+        const points = []
         points.push(coord1)
         points.push(coord2)
-        let geometry = new THREE.BufferGeometry().setFromPoints(points)
+        const geometry = new THREE.BufferGeometry().setFromPoints(points)
 
-        for (let color in reittidata.linjastot) {
-            let colored = reittidata.linjastot[color].filter(
+        for (const color in reittidata.linjastot) {
+            const colored = reittidata.linjastot[color].filter(
                 (x) => x === tie.mista || x === tie.mihin
             )
             if (colored.length > 1) {
-                let line = new THREE.Line(geometry, colors[color])
+                const line = new THREE.Line(geometry, colors[color])
                 line.position.y = 0.5
                 line.name = tie.mista + " - " + tie.mihin
                 if (color === "keltainen") {
@@ -208,11 +203,11 @@ const init = () => {
     scene.background = new THREE.Color(0xefd1b5)
     scene.fog = new THREE.FogExp2(0xefd1b5, 0.02)
 
-    let hemilight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 0.75)
+    const hemilight = new THREE.HemisphereLight(0xffeeb1, 0x080820, 0.75)
     hemilight.castShadow = true
     scene.add(hemilight)
 
-    let spotlight = new THREE.SpotLight(0xffa95c, 0.1)
+    const spotlight = new THREE.SpotLight(0xffa95c, 0.1)
     spotlight.position.y = 20
     spotlight.castShadow = true
     scene.add(spotlight)
@@ -230,7 +225,7 @@ const init = () => {
     renderer.setSize(window.innerWidth, window.innerHeight)
     document.body.appendChild(renderer.domElement)
 
-    let manager = new THREE.LoadingManager()
+    const manager = new THREE.LoadingManager()
     manager.onStart = function (url, itemsLoaded, itemsTotal) {
         updateLoading({ url, itemsLoaded, itemsTotal })
     }
@@ -248,7 +243,7 @@ const init = () => {
         console.log("There was an error loading " + url)
     }
 
-    let loader = new GLTFLoader(manager)
+    const loader = new GLTFLoader(manager)
     loader.load(
         "../../static/models/map.glb",
         function (gltf) {
@@ -297,8 +292,8 @@ let animate = function (t) {
     requestAnimationFrame(animate)
 
     if (highlighted) {
-        let deltaTime = clock.getDelta()
-        let blink = Math.floor(time / 0.5) & 1
+        const deltaTime = clock.getDelta()
+        const blink = Math.floor(time / 0.5) & 1
 
         if (previousFrameBlinked !== blink) {
             blinkLines()
@@ -309,7 +304,7 @@ let animate = function (t) {
         time += deltaTime
     }
 
-    if (controls.enabled) {
+    if (cameraMode === "Orbital") {
         controls.update()
     }
 

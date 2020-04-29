@@ -8,55 +8,11 @@
             rel="stylesheet"
             type="text/css"
         />
-        <style>
-            body {
-                margin: 0;
-                font-family: "Roboto", sans-serif;
-            }
-            canvas {
-                display: block;
-            }
-            #travelInfo {
-                position: absolute;
-                padding-top: 10px;
-                padding-bottom: 10px;
-                width: 100%;
-                text-align: center;
-                z-index: 1;
-                pointer-events: none;
-                display: block;
-                background-color: rgba(0, 0, 0, 0.2);
-                color: whitesmoke;
-                bottom: 0;
-                font-size: 1.5em;
-                height: 1.4em;
-                transition: all 0.5s ease-in-out;
-                opacity: 0;
-            }
-            #loading {
-                text-align: center;
-                z-index: 1;
-                pointer-events: none;
-                display: block;
-                color: whitesmoke;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 4em;
-                opacity: 1;
-                transition: all 0.5s;
-                border-radius: 5px;
-                padding: 10px;
-            }
-            #gui {
-                position: absolute;
-                z-index: 1; /* adjust as needed */
-                top: 0;
-                right: 0;
-                transform: scale(1.25) translateX(-10%) translateY(10%); 
-            }
-        </style>
+        <link
+            href="./static/main.css"
+            rel="stylesheet"
+            
+        />
     </head>
     <body>
         <div id="travelInfo"></div>

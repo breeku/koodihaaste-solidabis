@@ -9,7 +9,7 @@ const transformJSON = () => {
 
     for (let value of reittidata.tiet) {
         let reitit = {}
-        let tiet = reittidata.tiet.filter(
+        const tiet = reittidata.tiet.filter(
             (x) => value.mista === x.mista || value.mista === x.mihin
         )
         for (let tie of tiet) {
@@ -26,8 +26,8 @@ const transformJSON = () => {
         result = { ...result, [value.mista]: reitit }
     }
 
-    for (let reitti in result) {
-        for (let node in result[reitti]) {
+    for (const reitti in result) {
+        for (const node in result[reitti]) {
             if (!result[node]) {
                 result[node] = {
                     ...result[node],
@@ -48,14 +48,14 @@ const pathfinding = (from, to) => {
         return
     }
 
-    let unvisited = Object.keys(tiet)
+    const unvisited = Object.keys(tiet)
     let route = { nodes: [], time: 0 }
     let history = {
         [from]: { distance: 0, prevNode: from },
     }
     let currNode = from
 
-    for (let node of unvisited) {
+    for (const node of unvisited) {
         if (node !== from)
             history = {
                 ...history,
@@ -64,10 +64,10 @@ const pathfinding = (from, to) => {
     }
 
     while (unvisited.length > 0) {
-        let neighbors = tiet[currNode]
+        const neighbors = tiet[currNode]
         let next = null
 
-        for (let neighbor in neighbors) {
+        for (const neighbor in neighbors) {
             if (neighbor === from) {
                 history = {
                     ...history,
@@ -77,8 +77,8 @@ const pathfinding = (from, to) => {
                     },
                 }
             } else {
-                let totalDistance = history[currNode].distance + neighbors[neighbor]
-                let neighborDistance = history[neighbor].distance
+                const totalDistance = history[currNode].distance + neighbors[neighbor]
+                const neighborDistance = history[neighbor].distance
                 if (
                     neighborDistance === Infinity ||
                     neighborDistance >= totalDistance
@@ -94,10 +94,10 @@ const pathfinding = (from, to) => {
             }
         }
 
-        let index = unvisited.indexOf(currNode)
+        const index = unvisited.indexOf(currNode)
         if (index !== -1) unvisited.splice(index, 1)
 
-        for (let node in history) {
+        for (const node in history) {
             if (
                 (next === null ||
                     history[node].distance < history[next].distance) &&
@@ -112,7 +112,7 @@ const pathfinding = (from, to) => {
 
     let temp = to
 
-    let reversedRoute = [temp]
+    const reversedRoute = [temp]
 
     while (temp !== from) {
         temp = history[temp].prevNode
