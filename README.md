@@ -14,7 +14,7 @@
 
 `Jest`
 
-Reitinhakualgoritmi on Dijkstra jonka koodamisessa on käytetty apuna koulun materiaaleja sekä,
+[Reitinhakualgoritmi](https://github.com/breeku/koodihaaste-solidabis/blob/master/src/js/pathfinding.js#L45) on Dijkstra jonka koodamisessa on käytetty apuna koulun materiaaleja sekä,
 
 [https://www.youtube.com/watch?v=pVfj6mxhdMw&feature=emb_title](https://www.youtube.com/watch?v=pVfj6mxhdMw&feature=emb_title)
 
