@@ -9821,8 +9821,8 @@ const travel = {
 }
 
 const gui = new dat.GUI({ autoPlace: false })
-const gc = document.getElementById('gui');
-gc.appendChild(gui.domElement);
+const gc = document.getElementById("gui")
+gc.appendChild(gui.domElement)
 
 const routingGUI = gui.addFolder("Routing")
 routingGUI.open()
@@ -9902,7 +9902,9 @@ const blinkLines = () => {
 
 const goRoute = (route, target = spacecraft) => {
     if (route === null) return
-    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const map = scene.children.find((x) =>
+        x.children.find((o) => o.name === "A")
+    )
     const startingPosition = map.children
         .find((x) => x.name === route.nodes[0])
         .position.clone()
@@ -9948,7 +9950,9 @@ const addLines = () => {
         sininen: new THREE.LineBasicMaterial({ color: 0x0000ff }),
     }
 
-    const map = scene.children.find((x) => x.children.find((o) => o.name === "A"))
+    const map = scene.children.find((x) =>
+        x.children.find((o) => o.name === "A")
+    )
 
     for (const tie of reittidata.tiet) {
         const coord1 = map.children.find((x) => x.name === tie.mista).position
@@ -10093,15 +10097,13 @@ let animate = function (t) {
 
     if (cameraMode === "Orbital") {
         controls.update()
-    }
-
-    TWEEN.update(t)
-
-    if (cameraMode === "Chase" && goal) {
+    } else if (cameraMode === "Chase" && goal) {
         temp.setFromMatrixPosition(goal.matrixWorld)
         camera.position.lerp(temp, 0.2)
         camera.lookAt(spacecraft.position)
     }
+
+    TWEEN.update(t)
 
     renderer.render(scene, camera)
 }
@@ -10189,7 +10191,8 @@ const pathfinding = (from, to) => {
                     },
                 }
             } else {
-                const totalDistance = history[currNode].distance + neighbors[neighbor]
+                const totalDistance =
+                    history[currNode].distance + neighbors[neighbor]
                 const neighborDistance = history[neighbor].distance
                 if (
                     neighborDistance === Infinity ||
@@ -10211,8 +10214,7 @@ const pathfinding = (from, to) => {
 
         for (const node in history) {
             if (
-                (next === null ||
-                    history[node].distance < history[next].distance) &&
+                (!next || history[node].distance < history[next].distance) &&
                 unvisited.find((x) => x === node)
             ) {
                 next = node

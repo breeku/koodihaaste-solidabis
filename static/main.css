@@ -5,6 +5,17 @@ body {
 canvas {
     display: block;
 }
+#info {
+    position: absolute;
+    z-index: 1;
+    display: block;
+    color: whitesmoke;
+    padding: 10px;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+}
 #travelInfo {
     position: absolute;
     padding-top: 10px;

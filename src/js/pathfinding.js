@@ -77,7 +77,8 @@ const pathfinding = (from, to) => {
                     },
                 }
             } else {
-                const totalDistance = history[currNode].distance + neighbors[neighbor]
+                const totalDistance =
+                    history[currNode].distance + neighbors[neighbor]
                 const neighborDistance = history[neighbor].distance
                 if (
                     neighborDistance === Infinity ||
@@ -99,8 +100,7 @@ const pathfinding = (from, to) => {
 
         for (const node in history) {
             if (
-                (next === null ||
-                    history[node].distance < history[next].distance) &&
+                (!next || history[node].distance < history[next].distance) &&
                 unvisited.find((x) => x === node)
             ) {
                 next = node
